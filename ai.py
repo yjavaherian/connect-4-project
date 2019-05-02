@@ -3,7 +3,7 @@ from game_engine import GameModel
 from game_engine import GameStatus
 import time
 import collections
-epsilon = 1 / 100
+epsilon = 1 / 1000
 exploration_constant = 2
 move_time_limit = 1
 
