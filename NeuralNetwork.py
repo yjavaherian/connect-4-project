@@ -1,5 +1,6 @@
 from keras.models import Sequential
 from keras.layers import Dense
+import numpy as np
 
 class ValueEstimator:
     def __init__(self,n_layers,input_dim,hidden_dim):
@@ -11,6 +12,10 @@ class ValueEstimator:
             self.model.add(Dense(hidden_dim, input_dim=hidden_dim, activation='relu'))
         self.model.add(Dense(1, activation='tanh'))
 
+    def make_prediction(self, input, player_turn):
+        # turning input and player turn into network input:
+        x = np.array(input,player_turn)
+        print(x)
+        # self.model.predict()
 
-    def make_prediction(self,input, player_turn):
-        self.model.
+
