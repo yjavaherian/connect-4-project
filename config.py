@@ -1,6 +1,5 @@
 from NeuralNetwork import ValueEstimator
 
-global nn
 
 def init():
     global nn
