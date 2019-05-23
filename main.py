@@ -59,5 +59,6 @@ while time.time() - train_start_time < running_train_time:
     config.nn.train(X_train, y_train)
 # updating the database file :
 pickle.dump(database, open("database_dump.pkl", "wb"))
+config.nn.save_model()
 # print("Consumed %sB memory" % resource.getrusage(resource.RUSAGE_SELF).ru_maxrss)
 # ValueEstimator(5, 42, 10)
