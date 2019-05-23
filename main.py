@@ -1,16 +1,16 @@
 from game_engine import GameStatus
 from game_engine import GameEngine
-from NeuralNetwork import ValueEstimator
 from ai import AI
 import pickle
 import time
 import numpy as np
 import config
+
+config.init()
 # import resource
 # creating an NN for now
-# nn = ValueEstimator(2,42,50)
-config.init()
-
+#nn = ValueEstimator(2, 42, 50)
+#
 running_train_time = 1
 train_start_time = time.time()
 # creating a new game and two ais:
@@ -56,7 +56,8 @@ while time.time() - train_start_time < running_train_time:
     # new idea lets pass the whole database:
     X_train = np.array(batch)
     y_train = np.full(X_train.shape[0], game_value)
-    config.nn.train(X_train,y_train)
+    config.nn.train(X_train, y_train)
 # updating the database file :
-pickle.dump(database,open("database_dump.pkl", "wb"))
+pickle.dump(database, open("database_dump.pkl", "wb"))
 # print("Consumed %sB memory" % resource.getrusage(resource.RUSAGE_SELF).ru_maxrss)
+# ValueEstimator(5, 42, 10)

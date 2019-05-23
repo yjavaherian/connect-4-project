@@ -16,18 +16,31 @@ class ValueEstimator:
     def make_prediction(self, input, player_turn):
         # turning input and player turn into network input:
         x = np.array(input)
-        x.reshape(42, -1)
+        x.reshape(42,1)
         out = self.model.predict(x)
         if player_turn == 1:
             return out
         else:
             return -out
 
-        x = np.array(input,player_turn)
-        print(x)
+        # x = np.array(input,player_turn)
+        # print(x)
         # self.model.predict()
 
     def train(self,x_train,y_train,epochs=20):
-        batch_size = len(x_train)
-        self.model.compile(loss=keras.losses.categorical_crossentropy,
-                      optimizer=keras.optimizers.SGD(lr=0.01, momentum=0.9, nesterov=True))
+
+        x_train.reshape(x_train.shape[0],42,1)
+        # xtrain=np.empty([42,1],dtype=np.array)
+        # for item in x_train:
+        #     temp=np.array(item)
+        #     temp.reshape(42,1)
+        #     xtrain=np.append(temp)
+        # xtrain=xtrain[:,1:]
+        self.model.compile(loss=keras.losses.categorical_crossentropy,optimizer=keras.optimizers.SGD(lr=0.01, momentum=0.9, nesterov=True))
+        self.model.fit(x_train,y_train,epochs=epochs,batch_size=x_train.shape[0])
+
+
+
+
+
+
