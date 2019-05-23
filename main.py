@@ -1,99 +1,61 @@
 from game_engine import GameStatus
 from game_engine import GameEngine
+from NeuralNetwork import ValueEstimator
 from ai import AI
 import pickle
+import time
+import numpy as np
 
+# import resource
+# creating an NN for now
+nn = ValueEstimator(2,42,50)
+#
+running_train_time = 1
+train_start_time = time.time()
 # creating a new game and two ais:
 ai1 = AI(1)
 ai2 = AI(2)
 game = GameEngine()
-# game.show_board()
-# lets put two ais in front of each other:
-T = 0
-fb = open("jhwy.txt", "rb")
-with open("jhwy.txt", "rb") as fp:
-    q = pickle.load(fp)
+# loading database from pickle file
+try:
+    new_file = open("database_dump.pkl", "rb")
+    database = pickle.load(new_file)
+    new_file.close()
+except:
+    database = []
+    new_file = open("database_dump.pkl","wb")
+    pickle.dump(database, new_file)
+    new_file.close()
 
-database = q
-print(database)
 batch=[]
-batch2=[]
-while T < 50:
+while time.time() - train_start_time < running_train_time:
     game.reset_game()
     batch.clear()
     while game.get_game_status() == GameStatus.IN_PROGRESS:
-        T += 1
         board, player = game.get_game_state()
+        batch.append(board)
         if player == 1:
             action = ai1.select_action(board)
-            batch.append(board)
         else:
             action = ai2.select_action(board)
-            batch2.append(board)
         game.register_action(player, action)
-    print("game took {} number of steps".format(T))
-
-    for bj in batch :
-         if bj in database:
-             y = database.index(bj)
-             num = database[y + 2]
-             database[y + 2] += 1
-             if game.get_game_status() == GameStatus.WINED_BY_P1:
-                 database[y + 1] = (num * database[y + 1]) +1
-                 database[y + 1] = database[y + 1] / database[y + 2]
-             elif game.get_game_status() == GameStatus.WINED_BY_P2:
-                 database[y + 1] = (num * database[y + 1]) - 1
-                 database[y + 1] = database[y + 1] / database[y + 2]
-             elif game.get_game_status() == GameStatus.DRAW :
-                 database[y + 1] = (num * database[y + 1])
-                 database[y + 1] = database[y + 1] / database[y + 2]
-         else:
-             database.append(bj)
-             database.append(0)
-             database.append(1)
-
-             y = database.index(bj)
-
-             if game.get_game_status() == GameStatus.WINED_BY_P1:
-                 database[y+1] += 1
-             elif game.get_game_status() == GameStatus.WINED_BY_P2:
-                 database[y+1] -= 1
-    for bj in batch2:
-        if bj in database:
-            y = database.index(bj)
-            num = database[y + 2]
-            database[y + 2] += 1
-            if game.get_game_status() == GameStatus.WINED_BY_P2:
-                database[y + 1] = (num * database[y + 1]) + 1
-                database[y + 1] = database[y + 1] / database[y + 2]
-            elif game.get_game_status() == GameStatus.WINED_BY_P2:
-                database[y + 1] = (num * database[y + 1]) - 1
-                database[y + 1] = database[y + 1] / database[y + 2]
-            elif game.get_game_status() == GameStatus.DRAW:
-                database[y + 1] = (num * database[y + 1])
-                database[y + 1] = database[y + 1] / database[y + 2]
-        else:
-            database.append(bj)
-            database.append(0)
-            database.append(1)
-
-            y = database.index(bj)
-
-            if game.get_game_status() == GameStatus.WINED_BY_P2:
-                database[y + 1] += 1
-            elif game.get_game_status() == GameStatus.WINED_BY_P1:
-                database[y + 1] -= 1
-print(database)
-
-# #
-# p
-with open("jhwy.txt","wb") as fp:
-    pickle.dump(database,fp)
-
-
-
-
-    #####################################
-    # print("Took %s sec to run %s times" % (tock - tick, num_reads))
-    # import resource
-    # print("Consumed %sB memory" % resource.getrusage(resource.RUSAGE_SELF).ru_maxrss)
+    # we now have a complete history of a game between two ais:
+    # we now update the database:
+    game_value = 0
+    if game.get_game_status() is GameStatus.WINED_BY_P1:
+        game_value = 1
+    elif game.get_game_status() is GameStatus.WINED_BY_P2:
+        game_value = -1
+    # for state in batch:
+    #     database.index()
+    #     database.setdefault(np.array(state), np.zeros(2))
+    #     database[np.array(state)][0] += game_value
+    #     database[np.array(state)][1] += 1
+    # informing the result to the NN:
+    # new idea lets pass the whole database:
+    X_train = np.array(batch)
+    y_train = np.full(X_train.shape[0], game_value)
+    nn.train(X_train,y_train)
+# updating the database file :
+pickle.dump(database,open("database_dump.pkl", "wb"))
+# print("Consumed %sB memory" % resource.getrusage(resource.RUSAGE_SELF).ru_maxrss)

@@ -5,7 +5,7 @@ import time
 import collections
 epsilon = 1 / 1000
 exploration_constant = 2
-move_time_limit = 1
+move_time_limit = 0.01
 
 
 class AI:
