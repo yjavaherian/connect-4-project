@@ -1,3 +1,4 @@
-c = {1:[1,2],2:[3,4]}
-c[3] = [4,5]
-print(c)
+import numpy as np
+a= [[1,2],[3,4]]
+b = np.array(a)
+print(b.shape)
