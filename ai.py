@@ -3,6 +3,8 @@ from game_engine import GameModel
 from game_engine import GameStatus
 import time
 import collections
+import config
+
 epsilon = 1 / 1000
 exploration_constant = 2
 move_time_limit = 0.01
@@ -31,17 +33,18 @@ class AI:
             # doing the loop
             leaf = self.root.select_leaf()
             if leaf.number_visits == 0 or leaf.is_endgame:
-                end_game_status = self.model.play_random_rollout(leaf.player_turn, leaf.board)
-                if end_game_status == GameStatus.DRAW:
-                    value_estimate = 0
-                elif end_game_status == GameStatus.WINED_BY_P1 and self.player_number == 1:
-                    value_estimate = +1
-                elif end_game_status == GameStatus.WINED_BY_P1 and self.player_number == 2:
-                    value_estimate = -1
-                elif end_game_status == GameStatus.WINED_BY_P2 and self.player_number == 1:
-                    value_estimate = -1
-                elif end_game_status == GameStatus.WINED_BY_P2 and self.player_number == 2:
-                    value_estimate = +1
+                value_estimate = config.nn.make_prediction(leaf.board, leaf.player_turn)
+                # end_game_status = self.model.play_random_rollout(leaf.player_turn, leaf.board)
+                # if end_game_status == GameStatus.DRAW:
+                #     value_estimate = 0
+                # elif end_game_status == GameStatus.WINED_BY_P1 and self.player_number == 1:
+                #     value_estimate = +1
+                # elif end_game_status == GameStatus.WINED_BY_P1 and self.player_number == 2:
+                #     value_estimate = -1
+                # elif end_game_status == GameStatus.WINED_BY_P2 and self.player_number == 1:
+                #     value_estimate = -1
+                # elif end_game_status == GameStatus.WINED_BY_P2 and self.player_number == 2:
+                #     value_estimate = +1
                 leaf.backup(value_estimate)
             else:
                 leaf.is_expanded = True
