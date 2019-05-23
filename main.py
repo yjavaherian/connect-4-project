@@ -30,11 +30,7 @@ while T < 50:
         else:
             action = ai2.select_action(board)
             batch2.append(board)
-            # action = int(input("select a column to drop your block: "))
         game.register_action(player, action)
-        # print("player {} took action {}".format(player, action))
-        # game.show_board()
-  #  print("game state {}".format(game.get_game_status()))
     print("game took {} number of steps".format(T))
 
     for bj in batch :
@@ -60,30 +56,11 @@ while T < 50:
 
              if game.get_game_status() == GameStatus.WINED_BY_P1:
                  database[y+1] += 1
-            #     print("pppp")
              elif game.get_game_status() == GameStatus.WINED_BY_P2:
                  database[y+1] -= 1
-
-               ##  print("wwwwwwww")
     for bj in batch2:
-        n = 0
-        # for b in database:
-        #     k=0
-        #     j=0
-        #     # if b is list:
-        #     #     print("yes")
-        #     #     while j < len(bj):
-        #     #         if b[j] != bj[j]:
-        #     #             k = 1
-        #     #             break
-        #     #         j +=1
-        #     # else:
-        #     #         k=1
-        #     #         break
         if bj in database:
             y = database.index(bj)
-
-            n += 1
             num = database[y + 2]
             database[y + 2] += 1
             if game.get_game_status() == GameStatus.WINED_BY_P2:
@@ -95,7 +72,7 @@ while T < 50:
             elif game.get_game_status() == GameStatus.DRAW:
                 database[y + 1] = (num * database[y + 1])
                 database[y + 1] = database[y + 1] / database[y + 2]
-        if n == 0:
+        else:
             database.append(bj)
             database.append(0)
             database.append(1)
@@ -104,12 +81,8 @@ while T < 50:
 
             if game.get_game_status() == GameStatus.WINED_BY_P2:
                 database[y + 1] += 1
-            #     print("pppp")
             elif game.get_game_status() == GameStatus.WINED_BY_P1:
                 database[y + 1] -= 1
-
-
-print("ghjk")
 print(database)
 
 # #
