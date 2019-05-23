@@ -1,6 +1,7 @@
 from keras.models import Sequential
 from keras.layers import Dense
 import numpy as np
+import keras
 
 class ValueEstimator:
     def __init__(self,n_layers,input_dim,hidden_dim):
@@ -18,4 +19,7 @@ class ValueEstimator:
         print(x)
         # self.model.predict()
 
-
+    def train(self,x_train,y_train,epochs=20):
+        batch_size = len(x_train)
+        self.model.compile(loss=keras.losses.categorical_crossentropy,
+                      optimizer=keras.optimizers.SGD(lr=0.01, momentum=0.9, nesterov=True))
