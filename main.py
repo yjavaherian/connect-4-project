@@ -1,10 +1,7 @@
 from game_engine import GameStatus
 from game_engine import GameEngine
 from ai import AI
-import numpy as np
 import pickle
-import json
-import keras
 
 # creating a new game and two ais:
 ai1 = AI(1)
@@ -13,6 +10,7 @@ game = GameEngine()
 # game.show_board()
 # lets put two ais in front of each other:
 T = 0
+fb = open("jhwy.txt", "rb")
 with open("jhwy.txt", "rb") as fp:
     q = pickle.load(fp)
 
@@ -41,19 +39,6 @@ while T < 50:
 
     for bj in batch :
          n=0
-         # for b in database:
-         #     k=0
-         #     j=0
-         #     # if b is list:
-         #     #     print("yes")
-         #     #     while j < len(bj):
-         #     #         if b[j] != bj[j]:
-         #     #             k = 1
-         #     #             break
-         #     #         j +=1
-         #     # else:
-         #     #         k=1
-         #     #         break
          if bj in database:
              y = database.index(bj)
 

@@ -15,6 +15,14 @@ class ValueEstimator:
 
     def make_prediction(self, input, player_turn):
         # turning input and player turn into network input:
+        x = np.array(input)
+        x.reshape(42, -1)
+        out = self.model.predict(x)
+        if player_turn == 1:
+            return out
+        else:
+            return -out
+
         x = np.array(input,player_turn)
         print(x)
         # self.model.predict()
