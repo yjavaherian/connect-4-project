@@ -38,11 +38,8 @@ while T < 50:
     print("game took {} number of steps".format(T))
 
     for bj in batch :
-         n=0
          if bj in database:
              y = database.index(bj)
-
-             n += 1
              num = database[y + 2]
              database[y + 2] += 1
              if game.get_game_status() == GameStatus.WINED_BY_P1:
@@ -54,7 +51,7 @@ while T < 50:
              elif game.get_game_status() == GameStatus.DRAW :
                  database[y + 1] = (num * database[y + 1])
                  database[y + 1] = database[y + 1] / database[y + 2]
-         if n==0:
+         else:
              database.append(bj)
              database.append(0)
              database.append(1)
