@@ -7,7 +7,7 @@ import config
 
 epsilon = 1 / 1000
 exploration_constant = 2
-move_time_limit = 0.01
+move_time_limit = 0.3
 
 
 class AI:

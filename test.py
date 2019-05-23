@@ -1,3 +1,7 @@
-c = {1:[1,2],2:[3,4]}
-c[3] = [4,5]
-print(c)
+import numpy as np
+d= [2,1,1]
+x=np.array(d)
+x=np.reshape(x,3,1)
+print(x)
+
+
