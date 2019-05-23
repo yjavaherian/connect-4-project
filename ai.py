@@ -11,11 +11,12 @@ move_time_limit = 0.3
 
 
 class AI:
-    def __init__(self, player_number, board_height=6, board_width=7):
+    def __init__(self, player_number, board_height=6, board_width=7, dont_use_nn = False):
         # simple version of monte carlo tree search
         self.player_number = player_number
         self.model = GameModel(board_height, board_width)
         self.root = None
+        self.dont_use_nn = dont_use_nn
         return
 
     def select_action(self, board):
@@ -33,18 +34,20 @@ class AI:
             # doing the loop
             leaf = self.root.select_leaf()
             if leaf.number_visits == 0 or leaf.is_endgame:
-                value_estimate = config.nn.make_prediction(leaf.board, leaf.player_turn)
-                # end_game_status = self.model.play_random_rollout(leaf.player_turn, leaf.board)
-                # if end_game_status == GameStatus.DRAW:
-                #     value_estimate = 0
-                # elif end_game_status == GameStatus.WINED_BY_P1 and self.player_number == 1:
-                #     value_estimate = +1
-                # elif end_game_status == GameStatus.WINED_BY_P1 and self.player_number == 2:
-                #     value_estimate = -1
-                # elif end_game_status == GameStatus.WINED_BY_P2 and self.player_number == 1:
-                #     value_estimate = -1
-                # elif end_game_status == GameStatus.WINED_BY_P2 and self.player_number == 2:
-                #     value_estimate = +1
+                if self.dont_use_nn:
+                    end_game_status = self.model.play_random_rollout(leaf.player_turn, leaf.board)
+                    if end_game_status == GameStatus.DRAW:
+                        value_estimate = 0
+                    elif end_game_status == GameStatus.WINED_BY_P1 and self.player_number == 1:
+                        value_estimate = +1
+                    elif end_game_status == GameStatus.WINED_BY_P1 and self.player_number == 2:
+                        value_estimate = -1
+                    elif end_game_status == GameStatus.WINED_BY_P2 and self.player_number == 1:
+                        value_estimate = -1
+                    elif end_game_status == GameStatus.WINED_BY_P2 and self.player_number == 2:
+                        value_estimate = +1
+                else:
+                    value_estimate = config.nn.make_prediction(leaf.board, leaf.player_turn)
                 leaf.backup(value_estimate)
             else:
                 leaf.is_expanded = True

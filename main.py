@@ -11,7 +11,7 @@ config.init()
 # creating an NN for now
 #nn = ValueEstimator(2, 42, 50)
 #
-running_train_time = 60
+running_train_time = 600
 train_start_time = time.time()
 # creating a new game and two ais:
 ai1 = AI(1)
