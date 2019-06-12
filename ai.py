@@ -20,7 +20,6 @@ class AI:
         return
 
     def select_action(self, board):
-        tick = time.time()
         itr = 0
         if self.root is None or self.root.find_next_root(board) is None:
             # we need to create the root.
@@ -29,6 +28,7 @@ class AI:
             self.root = self.root.find_next_root(board)
 
         # while itr < move_itr_limit:
+        tick = time.time()
         while (time.time() - tick) < move_time_limit:
             itr += 1
             # doing the loop
@@ -47,7 +47,7 @@ class AI:
                     elif end_game_status == GameStatus.WINED_BY_P2 and self.player_number == 2:
                         value_estimate = +1
                 else:
-                    value_estimate = config.nn.make_prediction(leaf.board, leaf.player_turn)
+                    value_estimate = config.nn.make_prediction(leaf.board, self.player_number)
                 leaf.backup(value_estimate)
             else:
                 leaf.is_expanded = True
