@@ -3,7 +3,7 @@ from game_engine import GameModel
 from game_engine import GameStatus
 import time
 import collections
-import config
+# import config
 
 epsilon = 1 / 1000
 exploration_constant = 2
@@ -47,7 +47,8 @@ class AI:
                     elif end_game_status == GameStatus.WINED_BY_P2 and self.player_number == 2:
                         value_estimate = +1
                 else:
-                    value_estimate = config.nn.make_prediction(leaf.board, self.player_number)
+                    # value_estimate = config.nn.make_prediction(leaf.board, self.player_number)
+                    value_estimate = 0
                 leaf.backup(value_estimate)
             else:
                 leaf.is_expanded = True

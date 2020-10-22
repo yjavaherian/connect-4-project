@@ -141,22 +141,24 @@ class GameEngine:
     def _check_for_line(self, i, j, player):
         # checking horizontal line
         if (j + 3) < self.board_width:
-            if self.board[i][j+1] == player and self.board[i][j+2] == player and self.board[i][j+3] == player:
+            if self.board[i][j + 1] == player and self.board[i][j + 2] == player and self.board[i][j + 3] == player:
                 return True
 
         # checking vertical line:
         if (i + 3) < self.board_height:
-            if self.board[i+1][j] == player and self.board[i+2][j] == player and self.board[i+3][j] == player:
+            if self.board[i + 1][j] == player and self.board[i + 2][j] == player and self.board[i + 3][j] == player:
                 return True
 
         # checking diagonal right:
         if (j + 3) < self.board_width and (i + 3) < self.board_height:
-            if self.board[i+1][j+1] == player and self.board[i+2][j+2] == player and self.board[i+3][j+3] == player:
+            if self.board[i + 1][j + 1] == player and self.board[i + 2][j + 2] == player and self.board[i + 3][
+                j + 3] == player:
                 return True
 
         # checking diagonal left:
         if (j - 3) >= 0 and (i + 3) < self.board_height:
-            if self.board[i+1][j-1] == player and self.board[i+2][j-2] == player and self.board[i+3][j-3] == player:
+            if self.board[i + 1][j - 1] == player and self.board[i + 2][j - 2] == player and self.board[i + 3][
+                j - 3] == player:
                 return True
         return False
 
@@ -173,6 +175,5 @@ class GameEngine:
         return export_board, player_turn
 
     def show_board(self):
-        plt.matshow(np.array(self.board))
+        plt.matshow(np.array(self.board), cmap='viridis', vmin=0, vmax=2)
         plt.show()
-
